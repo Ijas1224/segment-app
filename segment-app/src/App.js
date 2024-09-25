@@ -28,24 +28,63 @@ function App() {
     setAdditionalSchemas([]);
   };
 
-  const handleSaveSegment = () => {
+  const handleSaveSegment = async () => {
     const data = {
-      segment_name: segmentName,
-      schema: [
-        ...selectedSchemas.map((value) => {
-          const foundSchema = schemas.find(schema => schema.value === value);
-          return { [foundSchema.value]: foundSchema.label };
-        }),
-        ...additionalSchemas.map((value) => {
-          const foundSchema = schemas.find(schema => schema.value === value);
-          return { [foundSchema.value]: foundSchema.label };
-        }),
-      ],
+        segment_name: segmentName,
+        schema: [
+            ...selectedSchemas.map((value) => {
+                const foundSchema = schemas.find(schema => schema.value === value);
+                return { [foundSchema.value]: foundSchema.label };
+            }),
+            ...additionalSchemas.map((value) => {
+                const foundSchema = schemas.find(schema => schema.value === value);
+                return { [foundSchema.value]: foundSchema.label };
+            }),
+        ],
     };
 
-    console.log(data);
+    try {
+        const response = await fetch('https://webhook.site/150b32fd-aa63-48e3-89f2-1c83f14a74ab', { // Webhook URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            console.log('Data sent successfully:', data);
+        } else {
+            console.error('Error sending data:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+    }
+
     togglePopup();
-  };
+};
+
+    try {
+        const response = await fetch('YOUR_WEBHOOK_URL', { // Replace with your Webhook URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+            console.log('Data sent successfully:', data);
+        } else {
+            console.error('Error sending data:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+    }
+
+    togglePopup();
+};
+
 
   const handleSchemaChange = (index, value) => {
     const newSelectedSchemas = [...selectedSchemas];
